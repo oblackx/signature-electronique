@@ -9,13 +9,14 @@ public class AuthService {
             String response = DBConnection.authenticateUser(email, password);
             JSONObject jsonResponse = new JSONObject(response);
             
-            if (jsonResponse.getBoolean("success")) {
+            // Vérifiez la présence du token et des données utilisateur
+            if (jsonResponse.has("token") && jsonResponse.has("user")) {
                 JSONObject user = jsonResponse.getJSONObject("user");
                 Session.startSession(
                     user.getInt("id"),
                     user.getString("nom"),
                     user.getString("email"),
-                    jsonResponse.getString("token")
+                    jsonResponse.getString("token") // Token JWT
                 );
                 return true;
             }
@@ -26,11 +27,24 @@ public class AuthService {
         }
     }
 
+
     public boolean registerUser(String nom, String prenom, String email, String password) {
         try {
             String response = DBConnection.registerUser(nom, prenom, email, password);
             JSONObject jsonResponse = new JSONObject(response);
-            return jsonResponse.getBoolean("success");
+            
+            // Vérifiez la réponse de l'API (adaptez selon votre structure Laravel)
+            if (jsonResponse.has("token") && jsonResponse.has("user")) {
+                JSONObject user = jsonResponse.getJSONObject("user");
+                Session.startSession(
+                    user.getInt("id"),
+                    user.getString("nom"),
+                    user.getString("email"),
+                    jsonResponse.getString("token")
+                );
+                return true;
+            }
+            return false;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
