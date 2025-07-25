@@ -5,24 +5,27 @@ import javafx.stage.Stage;
 public class AuthController {
     private final AuthService authService = new AuthService();
 
-    public void setup(LoginView view, Stage stage) {
+    public void setup(LoginView view, Stage stage, Runnable onLoginSuccess) {
         view.getLoginButton().setOnAction(e -> {
+            view.clearError();
             String email = view.getEmail();
             String password = view.getPassword();
-            boolean isAuthenticated = authService.authenticate(email, password);
 
-            if (isAuthenticated) {
-                System.out.println("Connexion réussie !");
-                // TODO: Redirection vers l’application principale
+            if (email.isEmpty() || password.isEmpty()) {
+                view.showError("Email et mot de passe requis");
+                return;
+            }
+
+            if (authService.authenticate(email, password)) {
+                onLoginSuccess.run();
             } else {
-                System.out.println("Échec de l’authentification.");
+                view.showError("Email ou mot de passe incorrect");
             }
         });
 
         view.getRegisterButton().setOnAction(e -> {
             RegisterController registerController = new RegisterController();
             registerController.showRegister(stage, () -> {
-                // Retour à la vue login
                 stage.setScene(view.createLoginScene());
                 stage.setTitle("Connexion");
             });
