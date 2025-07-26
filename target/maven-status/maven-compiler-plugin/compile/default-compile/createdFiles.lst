@@ -1,0 +1,13 @@
+com\monprojet\ClientLourd\RegisterView.class
+com\monprojet\ClientLourd\LoginView.class
+com\monprojet\ClientLourd\db\DBConnection.class
+com\monprojet\ClientLourd\RegisterController.class
+com\monprojet\ClientLourd\App.class
+com\monprojet\ClientLourd\AuthController.class
+com\monprojet\ClientLourd\AuthService.class
+com\monprojet\ClientLourd\MainApp$1.class
+com\monprojet\ClientLourd\services\SignatureManager.class
+com\monprojet\ClientLourd\MainView.class
+com\monprojet\ClientLourd\MainApp.class
+com\monprojet\ClientLourd\services\USBDirectoryDetector.class
+com\monprojet\ClientLourd\Session.class
