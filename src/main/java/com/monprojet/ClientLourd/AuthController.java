@@ -1,7 +1,6 @@
 package com.monprojet.ClientLourd;
 
 import javafx.stage.Stage;
-import javafx.scene.control.Alert;
 
 public class AuthController {
     private final AuthService authService = new AuthService();
@@ -19,13 +18,9 @@ public class AuthController {
 
             if (authService.authenticate(email, password)) {
                 System.out.println("✅ Connexion réussie: Bienvenue, " + Session.getNom());
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Succès");
-                alert.setHeaderText("Bienvenue !");
-                alert.setContentText("Bonjour " + Session.getNom() + ", connexion réussie.");
-                alert.showAndWait();
+                onLoginSuccess.run(); // ✅ مباشرة نمشيو للواجهة ديال stagira
             } else {
-                view.showError("Email ou mot de passe incorrect");
+                view.showError("❌ Email ou mot de passe incorrect");
             }
         });
 
