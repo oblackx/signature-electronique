@@ -34,6 +34,8 @@ public class MainApp extends Application {
         LoginView loginView = new LoginView();
 
         Scene loginScene = loginView.createLoginScene();
+        loginScene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+        
 
         AuthController controller = new AuthController();
         controller.setup(loginView, primaryStage, this::showMainView);
@@ -103,6 +105,13 @@ public class MainApp extends Application {
 
         VBox root = new VBox(10, btnJoindre, lblFichier, lblUSBStatus, btnSigner, lblResultat);
         Scene mainScene = new Scene(root, 500, 300);
+        mainScene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+        
+        btnJoindre.getStyleClass().add("button");
+        btnSigner.getStyleClass().add("button");
+        lblResultat.getStyleClass().add("result-label");
+        lblUSBStatus.getStyleClass().add("usb-status");
+
 
         primaryStage.setTitle("Tableau de bord - Signature Électronique");
         primaryStage.setScene(mainScene);
