@@ -18,7 +18,7 @@ public class AuthController {
 
             if (authService.authenticate(email, password)) {
                 System.out.println("✅ Connexion réussie: Bienvenue, " + Session.getNom());
-                onLoginSuccess.run(); // ✅ مباشرة نمشيو للواجهة ديال stagira
+                onLoginSuccess.run(); // l'interface "Youssra"
             } else {
                 view.showError("❌ Email ou mot de passe incorrect");
             }

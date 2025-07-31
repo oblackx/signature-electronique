@@ -18,7 +18,7 @@ public class AuthService {
 	                user.getInt("id"),
 	                user.getString("nom"),
 	                user.getString("email"),
-	                jsonResponse.getString("access_token") // ✅ استعمل access_token
+	                jsonResponse.getString("access_token") // using access token 
 	            );
 	            return true;
 	        }else {
@@ -39,7 +39,6 @@ public class AuthService {
             String response = DBConnection.registerUser(nom, prenom, email, password);
             JSONObject jsonResponse = new JSONObject(response);
             
-            // Vérifiez la réponse de l'API (adaptez selon votre structure Laravel)
             if (jsonResponse.has("token") && jsonResponse.has("user")) {
                 JSONObject user = jsonResponse.getJSONObject("user");
                 Session.startSession(
