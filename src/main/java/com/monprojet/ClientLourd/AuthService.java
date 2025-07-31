@@ -31,28 +31,4 @@ public class AuthService {
 	        return false;
 	    }
 	}
-
-
-
-    public boolean registerUser(String nom, String prenom, String email, String password) {
-        try {
-            String response = DBConnection.registerUser(nom, prenom, email, password);
-            JSONObject jsonResponse = new JSONObject(response);
-            
-            if (jsonResponse.has("token") && jsonResponse.has("user")) {
-                JSONObject user = jsonResponse.getJSONObject("user");
-                Session.startSession(
-                    user.getInt("id"),
-                    user.getString("nom"),
-                    user.getString("email"),
-                    jsonResponse.getString("token")
-                );
-                return true;
-            }
-            return false;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
 }

@@ -11,7 +11,6 @@ public class LoginView {
     private TextField emailField;
     private PasswordField passwordField;
     private Button loginBtn;
-    private Button registerBtn;
     private Label errorLabel;
 
     public Scene createLoginScene() {
@@ -36,14 +35,12 @@ public class LoginView {
         grid.add(passwordField, 1, 1);
 
         loginBtn = new Button("Se connecter");
-        registerBtn = new Button("Créer un compte");
-        registerBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: #007bff; -fx-underline: true;");
-
+        
         errorLabel = new Label();
         errorLabel.setStyle("-fx-text-fill: red;");
         errorLabel.setVisible(false);
 
-        VBox root = new VBox(20, title, grid, errorLabel, loginBtn, registerBtn);
+        VBox root = new VBox(20, title, grid, errorLabel, loginBtn);
         root.setAlignment(Pos.CENTER);
         root.setPadding(new Insets(40));
 
@@ -63,5 +60,4 @@ public class LoginView {
     public String getEmail() { return emailField.getText(); }
     public String getPassword() { return passwordField.getText(); }
     public Button getLoginButton() { return loginBtn; }
-    public Button getRegisterButton() { return registerBtn; }
 }

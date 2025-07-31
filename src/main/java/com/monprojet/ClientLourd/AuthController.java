@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 public class AuthController {
     private final AuthService authService = new AuthService();
 
+    
     public void setup(LoginView view, Stage stage, Runnable onLoginSuccess) {
         view.getLoginButton().setOnAction(e -> {
             view.clearError();
@@ -24,12 +25,5 @@ public class AuthController {
             }
         });
 
-        view.getRegisterButton().setOnAction(e -> {
-            RegisterController registerController = new RegisterController();
-            registerController.showRegister(stage, () -> {
-                stage.setScene(view.createLoginScene());
-                stage.setTitle("Connexion");
-            });
-        });
-    }
-}
+    
+    }}

@@ -20,17 +20,6 @@ public class DBConnection {
 	    return sendRequest(endpoint, "POST", jsonInput.toString());
 	}
 
-        public static String registerUser(String nom, String prenom, String email, String password) throws Exception {
-            String endpoint = "register"; // Correspond à POST /api/register dans Laravel
-            JSONObject jsonInput = new JSONObject();
-            jsonInput.put("nom", nom);
-            jsonInput.put("prenom", prenom);
-            jsonInput.put("email", email);
-            jsonInput.put("password", password);
-            
-            return sendRequest(endpoint, "POST", jsonInput.toString());
-        }
-
         private static String sendRequest(String endpoint, String method, String jsonInput) throws Exception {
             URL url = new URI(API_BASE_URL + endpoint).toURL();
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
