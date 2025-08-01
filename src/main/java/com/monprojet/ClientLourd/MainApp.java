@@ -67,6 +67,11 @@ public class MainApp extends Application {
 
         // Signature action
         btnSigner.setOnAction(e -> {
+        	File test = new File(usbDrive, "certifica.p7s");
+        	System.out.println("🧪 Path: " + test.getAbsolutePath());
+        	System.out.println("🧪 Exists: " + test.exists());
+        	System.out.println("🧪 CanRead: " + test.canRead());
+
             if (fichierChoisi == null) {
                 lblResultat.setText("⚠️ Veuillez choisir un fichier !");
                 return;
@@ -78,7 +83,7 @@ public class MainApp extends Application {
             }
 
             try {
-                File certificateFile = new File(usbDrive, "certifica");
+                File certificateFile = new File(usbDrive, "certifica.p7s");
                 
                 if (!certificateFile.exists()) {
                     lblResultat.setText("⚠️ Fichier 'certifica' introuvable sur la clé USB");

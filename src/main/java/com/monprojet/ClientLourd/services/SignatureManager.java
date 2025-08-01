@@ -91,9 +91,9 @@ public class SignatureManager {
         cert.checkValidity();
         
         // Example: Check issuer
-        X500Name issuer = new X500Name(cert.getIssuerX500Principal().getName());
+      /*  X500Name issuer = new X500Name(cert.getIssuerX500Principal().getName());
         if (!issuer.equals(new X500Name("CN=My Trusted CA,O=My Org"))) {
             throw new SecurityException("Untrusted certificate issuer");
-        }
+        }*/
     }
 }
