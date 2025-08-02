@@ -1,39 +1,36 @@
 .root {
-    -fx-background-color: linear-gradient(to bottom right, #7F00FF, #ffffff);
+    -fx-background-color: #f0f0f0; /* gris clair */
     -fx-font-family: 'Segoe UI', sans-serif;
     -fx-padding: 30px;
 }
 
 .label {
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: #444444; /* gris foncé */
     -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-effect: dropshadow(gaussian, #0099ff, 3, 0.7, 0, 1);
 }
 
 .text-field, .password-field {
-    -fx-background-color: #ffffff;
-    -fx-text-fill: #7F00FF;
+    -fx-background-color: #ffffff; /* blanc */
+    -fx-text-fill: #333333; /* texte gris foncé */
     -fx-font-size: 13px;
-    -fx-background-radius: 8px;
-    -fx-border-radius: 8px;
-    -fx-padding: 5px;
-    -fx-border-color: #0099ff;
-    -fx-border-width: 1.5px;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-padding: 6px;
+    -fx-border-color: #cccccc; /* gris clair */
+    -fx-border-width: 1px;
 }
 
 .button {
-    -fx-background-color: linear-gradient(to bottom right, #b30000, #7F00FF);
+    -fx-background-color: #666666; /* gris moyen */
     -fx-text-fill: white;
     -fx-font-size: 14px;
     -fx-padding: 10px 16px;
-    -fx-background-radius: 10px;
-    -fx-effect: dropshadow(gaussian, #0099ff, 5, 0.6, 0, 2);
+    -fx-background-radius: 6px;
     -fx-cursor: hand;
 }
 
 .button:hover {
-    -fx-background-color: linear-gradient(to bottom right, #ffffff, #b30000);
-    -fx-text-fill: #7F00FF;
-    -fx-effect: dropshadow(gaussian, #ffffff, 8, 0.9, 0, 3);
+    -fx-background-color: #888888; /* gris un peu plus clair au survol */
+    -fx-text-fill: white;
 }

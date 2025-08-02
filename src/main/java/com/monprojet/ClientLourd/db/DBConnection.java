@@ -5,7 +5,7 @@ import java.net.*;
 import org.json.JSONObject;
 
 public class DBConnection { 
-	private static final String API_BASE_URL ="http://127.0.00.1:8000/api/";
+	private static final String API_BASE_URL ="http://10.33.212.73:8000/api/";
 	public static String authenticateUser(String email, String password) throws Exception {
 	    String endpoint = "login";
 	    JSONObject jsonInput = new JSONObject();

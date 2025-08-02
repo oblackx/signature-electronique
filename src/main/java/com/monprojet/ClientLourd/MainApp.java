@@ -8,13 +8,15 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+
 import java.io.File;
+import java.security.Security;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 public class MainApp extends Application {
 
@@ -29,13 +31,11 @@ public class MainApp extends Application {
         showLoginView();
     }
 
-    // -------------------- VUE LOGIN --------------------
     private void showLoginView() {
         LoginView loginView = new LoginView();
 
         Scene loginScene = loginView.createLoginScene();
         loginScene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
-        
 
         AuthController controller = new AuthController();
         controller.setup(loginView, primaryStage, this::showMainView);
@@ -45,8 +45,6 @@ public class MainApp extends Application {
         primaryStage.show();
     }
 
-
-    // -------------------- VUE SIGNATURE (WITH USB SUPPORT) --------------------
     private void showMainView() {
         Button btnJoindre = new Button("Joindre un fichier");
         Label lblFichier = new Label("Aucun fichier choisi");
@@ -54,7 +52,6 @@ public class MainApp extends Application {
         Button btnSigner = new Button("Signer/Vérifier");
         Label lblResultat = new Label();
 
-        // File selection
         btnJoindre.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Choisir un document à signer");
@@ -65,13 +62,7 @@ public class MainApp extends Application {
             }
         });
 
-        // Signature action
         btnSigner.setOnAction(e -> {
-        	File test = new File(usbDrive, "certifica.p7s");
-        	System.out.println("🧪 Path: " + test.getAbsolutePath());
-        	System.out.println("🧪 Exists: " + test.exists());
-        	System.out.println("🧪 CanRead: " + test.canRead());
-
             if (fichierChoisi == null) {
                 lblResultat.setText("⚠️ Veuillez choisir un fichier !");
                 return;
@@ -83,40 +74,41 @@ public class MainApp extends Application {
             }
 
             try {
-                File certificateFile = new File(usbDrive, "certifica.p7s");
-                
-                if (!certificateFile.exists()) {
-                    lblResultat.setText("⚠️ Fichier 'certifica' introuvable sur la clé USB");
+                File certP7s = new File(usbDrive, "certifica.p7s");
+                File pkcs12File = new File(usbDrive, "certificat.p12");
+
+                if (!pkcs12File.exists()) {
+                    lblResultat.setText("❌ 'certificat.p12' manquant sur la clé USB !");
                     return;
                 }
 
-                boolean isVerified = SignatureManager.verifyDocumentSignature(
-                    fichierChoisi, 
-                    certificateFile
-                );
+                // 1. SIGNER le fichier
+                File signatureOutput = new File(fichierChoisi.getParent(), fichierChoisi.getName() + ".p7s");
+                SignatureManager.signDocumentDetached(fichierChoisi, pkcs12File, "0000", signatureOutput);
 
-                lblResultat.setText(isVerified ? 
-                    "✅ Signature vérifiée avec succès !" : 
-                    "⚠️ Échec de la vérification de signature");
+                // 2. VERIFIER la signature
+                boolean isVerified = SignatureManager.verifyDocumentSignature(fichierChoisi, signatureOutput);
+
+                lblResultat.setText(isVerified ?
+                        "✅ Signature créée et vérifiée avec succès !" :
+                        "⚠️ Signature générée, mais la vérification a échoué !");
 
             } catch (Exception ex) {
-                lblResultat.setText("❌ Erreur: " + ex.getMessage());
                 ex.printStackTrace();
+                lblResultat.setText("❌ Erreur : " + ex.getMessage());
             }
         });
 
-        // Start USB detection
         startUSBDetection(lblUSBStatus);
 
         VBox root = new VBox(10, btnJoindre, lblFichier, lblUSBStatus, btnSigner, lblResultat);
         Scene mainScene = new Scene(root, 500, 300);
         mainScene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
-        
+
         btnJoindre.getStyleClass().add("button");
         btnSigner.getStyleClass().add("button");
         lblResultat.getStyleClass().add("result-label");
         lblUSBStatus.getStyleClass().add("usb-status");
-
 
         primaryStage.setTitle("Tableau de bord - Signature Électronique");
         primaryStage.setScene(mainScene);
@@ -128,22 +120,23 @@ public class MainApp extends Application {
         usbDetectionTimer = new Timer(true);
         usbDetectionTimer.scheduleAtFixedRate(new TimerTask() {
             private File lastUSBDrive = null;
-            
+
             @Override
             public void run() {
                 File currentUSB = USBDirectoryDetector.findUSBDrive();
-                
+
                 if (currentUSB != null && !currentUSB.equals(lastUSBDrive)) {
                     lastUSBDrive = currentUSB;
                     usbDrive = currentUSB;
-                    Platform.runLater(() -> {
-                        statusLabel.setText("Statut USB: Connectée (" + currentUSB.getAbsolutePath() + ")");
-                    });
+                    Platform.runLater(() ->
+                        statusLabel.setText("Statut USB: Connectée (" + currentUSB.getAbsolutePath() + ")")
+                    );
                 } else if (currentUSB == null && lastUSBDrive != null) {
                     lastUSBDrive = null;
                     usbDrive = null;
-                    Platform.runLater(() -> 
-                        statusLabel.setText("Statut USB: Non connectée"));
+                    Platform.runLater(() ->
+                        statusLabel.setText("Statut USB: Non connectée")
+                    );
                 }
             }
         }, 0, 5000);
@@ -157,6 +150,7 @@ public class MainApp extends Application {
     }
 
     public static void main(String[] args) {
+        Security.addProvider(new BouncyCastleProvider());
         launch(args);
     }
 }
